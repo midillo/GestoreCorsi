@@ -70,9 +70,15 @@ public class FXMLController {
     	}
     	
     	List<Corso> corsi = this.model.getCorsiByPeriodo(periodo);
+    	StringBuilder sb = new StringBuilder();
+    	
     	for(Corso c: corsi) {
-    		txtRisultato.appendText(c.toString()+"\n");
+    		sb.append(String.format("%-9s", c.getCodins()));
+    		sb.append(String.format("%-5d", c.getCrediti()));
+    		sb.append(String.format("%-50s", c.getNome()));
+    		sb.append(String.format("%-5d\n", c.getPeriodo()));
     	}
+    	txtRisultato.appendText(sb.toString());
     }
 
     @FXML
@@ -105,32 +111,40 @@ public class FXMLController {
 
     @FXML
     void stampaDivisione(ActionEvent event) {
+    	txtRisultato.clear();
     	String corsoStringa = txtCorso.getText();
-    	try {
-    		Map<String, Integer> studenti = this.model.getDivisioneByCodiceCorso(corsoStringa);
-    		for(String s: studenti.keySet()) {
-    	    	txtRisultato.appendText(s.toString());
-    	    	Integer n = studenti.get(s);
-    	    	txtRisultato.appendText("\t"+n+"\n");
+
+    	Map<String, Integer> studenti = this.model.getDivisioneByCodiceCorso(corsoStringa);
+    		
+    	for(String s: studenti.keySet()) {
+    		if(studenti.get(s)!=null) {
+   	    	txtRisultato.appendText(s.toString()+"\t"+studenti.get(s)+"\n");
     		}
-    	}catch(NullPointerException npe) {
-    		txtRisultato.setText("Devi inserire il codice del corso");
-    		return;
     	}
-    }
+      }
 
     @FXML
     void stampaStudenti(ActionEvent event) {
+    	txtRisultato.clear();
     	String corsoStringa = txtCorso.getText();
-    	try {
-    		List<Studente> studenti = this.model.getIscrittiByCodiceCorso(corsoStringa);
-    		for(Studente s: studenti) {
-    			txtRisultato.appendText(s.toString()+"\n");
+    	
+    		if(!model.esisteCorso(corsoStringa)) {
+    			txtRisultato.appendText("Il corso non esiste!");
+    			return;
     		}
-    	}catch(NullPointerException npe) {
-    		txtRisultato.setText("Devi inserire il codice del corso");
-    		return;
-    	}
+    		List<Studente> studenti = this.model.getIscrittiByCodiceCorso(corsoStringa);
+    		if(studenti.size()==0) {
+    			txtRisultato.appendText("Il corso non ha iscritti!");
+    			return;
+    		}
+    		StringBuilder sb = new StringBuilder();
+    		for(Studente s: studenti) {
+    			sb.append(String.format("%-11s ", s.getMatricola()));
+        		sb.append(String.format("%-50s ", s.getCognome()));
+        		sb.append(String.format("%-50s ", s.getNome()));
+        		sb.append(String.format("%-50s\n", s.getCds()));
+    		}
+    		txtRisultato.appendText(sb.toString());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -147,6 +161,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	txtRisultato.setStyle("-fx-font-family: monospace");
     }
     
     

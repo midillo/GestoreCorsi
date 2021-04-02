@@ -2,10 +2,10 @@ package it.polito.tdp.corsi.model;
 
 public class Studente {
 	
-	Integer matricola;
-	String cognome;
-	String nome;
-	String cds;
+	private Integer matricola;
+	private String cognome;
+	private String nome;
+	private String cds;
 	
 	public Studente(Integer matricola, String cognome, String nome, String cds) {
 		super();
@@ -67,7 +67,9 @@ public class Studente {
 
 	@Override
 	public String toString() {
-		return "[Matricola=" + matricola + ", cognome=" + cognome + ", nome=" + nome + ", cds=" + cds + "]";
+		return "Studente [matricola=" + matricola + ", cognome=" + cognome + ", nome=" + nome + ", cds=" + cds + "]";
 	}
+
 	
 }
+

@@ -31,5 +31,9 @@ public class Model {
 	public Map<String, Integer> getDivisioneByCodiceCorso(String cd){
 		return studenteDao.getDivisioneByCodiceCorso(cd);
 	}
+
+	public boolean esisteCorso(String codice) {
+		return corsoDao.esisteCorso(new Corso(codice, null, null, null));
+	}
 	
 }
